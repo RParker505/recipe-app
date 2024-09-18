@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+# Include package allows you to use the include () function that will link the urls.py file in the app to the main urls.py file (this one)
+from django.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('recipes.urls'))
 ]
