@@ -16,10 +16,21 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
 # Include package allows you to use the include () function that will link the urls.py file in the app to the main urls.py file (this one)
 from django.urls import include
 
+# Settings allows you to access the MEDIA_URL and MEDIA_ROOT variables
+from django.conf import settings
+
+# Static provides access to the Django helper function static(), which allows you to create URLs from local folder name
+from django.conf.urls.static import static
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('recipes.urls'))
+    path('admin/', admin.site.urls), # URL pattern for admin site.
+    path('', include('recipes.urls')), # Include recipe app URLs as the root URLconf.
+    path("recipes/", include("recipes.urls")), # Explicit URL pattern for recipe app URLs.
 ]
+
+# Extend the urlpatters param to include the media info
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

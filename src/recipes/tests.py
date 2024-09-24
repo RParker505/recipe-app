@@ -60,3 +60,9 @@ class RecipeModelTest(TestCase):
 
         # Assert the difficulty is calculated accurately
         self.assertEqual(recipe.calculate_difficulty(), 'Easy')
+
+    # Test that absolute URL is correctly generated and that the RecipeDetailView loads with name is clicked
+    def test_get_absolute_url(self):
+        recipe = Recipe.objects.get(id=1)
+        # get_absolute_url() should take you to the detail page of recipe #1 and load the URL recipes/list/1
+        self.assertEqual(recipe.get_absolute_url(), '/recipes/1')
