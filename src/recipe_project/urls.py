@@ -26,10 +26,15 @@ from django.conf import settings
 # Static provides access to the Django helper function static(), which allows you to create URLs from local folder name
 from django.conf.urls.static import static
 
+# Import view that is set up in the root views.py file
+from .views import login_view, logout_view
+
 urlpatterns = [
     path('admin/', admin.site.urls), # URL pattern for admin site.
     path('', include('recipes.urls')), # Include recipe app URLs as the root URLconf.
     path("recipes/", include("recipes.urls")), # Explicit URL pattern for recipe app URLs.
+    path('login/', login_view, name='login'),
+    path('logout/', logout_view, name='logout'),
 ]
 
 # Extend the urlpatters param to include the media info

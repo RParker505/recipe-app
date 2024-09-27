@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>All Recipes</title>
+    <title>Recipe Details</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
         html, body {
@@ -83,6 +83,55 @@
         h3 {
             font-size: 1.8rem; /* For h3 size, adjust this value as needed */
         }
+
+        /* Styles for the logout link */
+        a {
+            display: inline-block; /* Turn the link into a block element */
+            padding: 10px 20px; /* Add some padding */
+            margin-top: 20px; /* Space above the button */
+            text-decoration: none; /* Remove underline */
+            font-size: 1.2rem; /* Make the text a bit larger */
+            font-family: 'Roboto Mono', 'Calibri', 'Trebuchet MS', sans-serif; /* Match the font with other elements */
+            color: white; /* White text color */
+            background-color: rgb(47, 79, 79); /* Match the main color of the page */
+            border-radius: 25px; /* Rounded corners for a modern look */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+        }
+
+        /* Hover effect */
+        a:hover {
+            background-color: rgb(35, 64, 64); /* Darker shade on hover */
+            transform: translateY(-2px); /* Slight upward movement */
+        }
+
+        /* Active effect */
+        a:active {
+            background-color: rgb(47, 79, 79); /* Original color on click */
+            transform: translateY(1px); /* Slight downward movement on click */
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px; /* Adjusts the top position */
+            right: 20px; /* Adjusts the right position */
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: white;
+            background-color: rgb(47, 79, 79);
+            border-radius: 25px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: rgb(35, 64, 64);
+            transform: translateY(-2px);
+        }
+
+        .logout-btn:active {
+            background-color: rgb(47, 79, 79);
+            transform: translateY(1px);
+        }
     </style>
 </head>
 
@@ -90,6 +139,9 @@
     <img src="{% static 'recipes/images/kitchen-tile.jpg' %}" 
     alt="Background image" 
     class="fullscreen-bg">
+
+    <!-- Tells Django to load the URL with the name “logout” when the user clicks -->
+    <a href="{%url 'logout' %}" class="logout-btn"> Logout </a>
 
     <h2>Recipe Details</h2>
 

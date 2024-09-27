@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>All Recipes</title>
+    <title>Recipe App Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
         html, body {
@@ -53,41 +53,11 @@
             font-size: 1.8rem; /* For h3 size, adjust this value as needed */
         }
 
-        .recipe-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px; /* Space between each card */
-            margin-top: 20px;
+        .recipe-img {
+            border-radius: 15px;
         }
 
-        .recipe-card {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the card */
-            padding: 20px;
-            width: 600px; /* Adjust width of each card */
-            max-width: 100%;
-        }
-
-        .recipe-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 8px; /* Slight rounding on the image */
-            object-fit: cover;
-            margin-right: 20px;
-        }
-
-        .recipe-info h2 {
-            font-family: 'Roboto Mono', 'Calibri', 'Trebuchet MS', sans-serif;
-            color: #2F4F4F;
-            font-size: 1.5rem;
-            margin: 0;
-        }
-
-        /* Styles for the logout link */
+        /* Styles for the login link */
         a {
             display: inline-block; /* Turn the link into a block element */
             padding: 10px 20px; /* Add some padding */
@@ -112,29 +82,6 @@
             background-color: rgb(47, 79, 79); /* Original color on click */
             transform: translateY(1px); /* Slight downward movement on click */
         }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px; /* Adjusts the top position */
-            right: 20px; /* Adjusts the right position */
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            color: white;
-            background-color: rgb(47, 79, 79);
-            border-radius: 25px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: rgb(35, 64, 64);
-            transform: translateY(-2px);
-        }
-
-        .logout-btn:active {
-            background-color: rgb(47, 79, 79);
-            transform: translateY(1px);
-        }
     </style>
 </head>
 
@@ -142,24 +89,16 @@
     <img src="{% static 'recipes/images/kitchen-tile.jpg' %}" 
     alt="Background image" 
     class="fullscreen-bg">
+    
+    <h1>You've Successfully Logged Out</h1>
 
-    <!-- Tells Django to load the URL with the name “logout” when the user clicks -->
-    <a href="{%url 'logout' %}" class="logout-btn"> Logout </a>
-
-    <h1>Recipe List</h1>
-
+    <h2>Come back soon!</h2>
+    
     <div class="content-wrapper">
-        <div class="recipe-list">
-            {% for recipe in object_list %}
-            <div class="recipe-card">
-                <img src="{{ recipe.pic.url }}" alt="{{ recipe.name }}" class="recipe-image">
-                <div class="recipe-info">
-                    <h2><a href = "{{recipe.get_absolute_url}}">{{ recipe.name }}</a></h2>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        <!-- Tells Django to load the URL with the name “login” when the user clicks -->
+        <a href="{%url 'login' %}"> Log Back In </a>
     </div>
+
 </body>
 
 </html>

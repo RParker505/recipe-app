@@ -95,7 +95,8 @@
     <div class="content-wrapper">
         <img src="{% static 'recipes/images/recipe-ingredients.jpg' %}" alt="cutting board and ingredients" width="500px" class="recipe-img">
         <h3>Log in to start cooking!</h3>
-        <a href="placeholder"> Login </a>
+        <!-- Tells Django to load the URL with the name “login” when the user clicks -->
+        <a href="{%url 'login' %}"> Login </a>
     </div>
 
 </body>
