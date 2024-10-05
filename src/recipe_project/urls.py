@@ -30,11 +30,10 @@ from django.conf.urls.static import static
 from .views import login_view, logout_view
 
 urlpatterns = [
-    path('admin/', admin.site.urls), # URL pattern for admin site.
-    path('', include('recipes.urls')), # Include recipe app URLs as the root URLconf.
-    path("recipes/", include("recipes.urls")), # Explicit URL pattern for recipe app URLs.
-    path('login/', login_view, name='login'),
-    path('logout/', logout_view, name='logout'),
+    path('admin/', admin.site.urls),  # URL pattern for admin site
+    path('', include('recipes.urls')),  # Include recipe app URLs as the root
+    path('login/', login_view, name='login'),  # Login view
+    path('logout/', logout_view, name='logout'),  # Logout view
 ]
 
 # Extend the urlpatters param to include the media info

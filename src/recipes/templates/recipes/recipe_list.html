@@ -39,7 +39,10 @@
             width: 100%;
             max-width: 1200px; /* Optionally limit the width of the content */
             padding: 20px;
-            text-align: center; /* Center the content */
+            text-align: center; /* Center text inside elements */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center child elements horizontally */
         }
 
         h1,
@@ -135,6 +138,34 @@
             background-color: rgb(47, 79, 79);
             transform: translateY(1px);
         }
+
+        /* Styles for the search button */
+        .search-btn {
+            display: inline-block; /* Turn the link into a block element */
+            padding: 10px 20px; /* Add some padding */
+            margin-top: 20px; /* Space above the button */
+            text-decoration: none; /* Remove underline */
+            font-size: 1.2rem; /* Match the font size */
+            font-family: 'Roboto Mono', 'Calibri', 'Trebuchet MS', sans-serif; /* Font family */
+            color: white; /* White text color */
+            background-color: rgb(47, 79, 79); /* Match the background color */
+            border-radius: 25px; /* Rounded corners for a modern look */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+            text-align: center; /* Center the text */
+            margin-bottom: 20px; /* Add some space at the bottom */
+        }
+
+        /* Hover effect for the search button */
+        .search-btn:hover {
+            background-color: rgb(35, 64, 64); /* Darker shade on hover */
+            transform: translateY(-2px); /* Slight upward movement */
+        }
+
+        /* Active effect for the search button */
+        .search-btn:active {
+            background-color: rgb(47, 79, 79); /* Original color on click */
+            transform: translateY(1px); /* Slight downward movement on click */
+        }
     </style>
 </head>
 
@@ -149,6 +180,8 @@
     <h1>Recipe List</h1>
 
     <div class="content-wrapper">
+        <a href="{%url 'recipes:recipe_search' %}" class="search-btn"> Search Recipes </a>
+        <br>
         <div class="recipe-list">
             {% for recipe in object_list %}
             <div class="recipe-card">

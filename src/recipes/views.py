@@ -1,7 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView   # To display list of recipes and their details
+from django.views.generic import ListView, DetailView, View   # To display list of recipes and their details
 from .models import Recipe                  # To access Recipe model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import RecipeSearchForm    # Import form from forms.py
+import pandas as pd
+from .utils import get_chart    # Import from utils.py
 
 # Create your views here.
 
@@ -11,10 +14,63 @@ def home(request):
 
 # List view
 class RecipeListView(LoginRequiredMixin, ListView):                 # Class-based view
-   model = Recipe                               # Specify model
-   template_name = 'recipes/recipe_list.html'   # Specify template 
+    model = Recipe                               # Specify model
+    template_name = 'recipes/recipe_list.html'   # Specify template 
 
 # Detail View
 class RecipeDetailView(LoginRequiredMixin, DetailView):
     model = Recipe
     template_name = 'recipes/recipe_details.html'
+
+class RecipeSearchView(LoginRequiredMixin, View):
+    form_class = RecipeSearchForm  # Define form_class as a class attribute
+    template_name = 'recipes/recipe_search.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()  # Now this will work because form_class is defined
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        # Default queryset for recipes
+        queryset = Recipe.objects.all()
+
+        if form.is_valid():
+            recipe_name = form.cleaned_data.get("Recipe_Name")
+            ingredients = form.cleaned_data.get("Ingredients")
+            chart_type = form.cleaned_data.get("chart_type")
+
+            # Filter by recipe name
+            if recipe_name:
+                queryset = queryset.filter(name__icontains=recipe_name)
+
+            # Filter by ingredients
+            if ingredients:
+                for ingredient in ingredients:
+                    queryset = queryset.filter(ingredients__icontains=ingredient)
+
+        # Convert queryset to DataFrame with calculated difficulty
+        recipe_data = []
+        for recipe in queryset:
+            recipe_data.append({
+                'name': recipe.name,
+                'cooking_time': recipe.cooking_time,
+                'difficulty': recipe.calculate_difficulty(),  # Call calculate_difficulty method
+            })
+
+        recipe_df = pd.DataFrame(recipe_data)
+
+        # Generate chart if there are results
+        chart = None
+        if not recipe_df.empty and chart_type:
+            chart = get_chart(chart_type, recipe_df)
+
+        # Add form, DataFrame, chart, and queryset (for recipe cards) to context
+        context = {
+            'form': form,
+            'recipe_df': recipe_df.to_html() if not recipe_df.empty else None,
+            'chart': chart,
+            'recipes': queryset,  # Pass queryset for recipe cards
+        }
+        return render(request, self.template_name, context)
