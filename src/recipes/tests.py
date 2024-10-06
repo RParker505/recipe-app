@@ -81,21 +81,21 @@ class RecipeFormTests(TestCase):
 
     def test_login_required(self):
         """Test that the search view is login-protected."""
-        response = self.client.get(reverse('recipe_search'))  # No namespace needed
+        response = self.client.get(reverse('recipes:recipe_search'))  # No namespace needed
         self.assertNotEqual(response.status_code, 200)  # Should redirect if not logged in
-        self.assertRedirects(response, '/accounts/login/?next=/search/')  # Now it reflects the '/search/' path
+        self.assertRedirects(response, '/login/?next=/search/')  # Now it reflects the '/search/' path
 
     def test_page_loads_after_login(self):
         """Test that the search page loads after the user logs in."""
         self.client.login(username='testuser', password='testpass')  # Log in the user
-        response = self.client.get(reverse('recipe_search'))  # No namespace needed
+        response = self.client.get(reverse('recipes:recipe_search'))  # No namespace needed
         self.assertEqual(response.status_code, 200)  # Check if page loads
         self.assertTemplateUsed(response, 'recipes/recipe_search.html')  # Check if correct template is used
 
     def test_form_submission_filters_recipes(self):
         """Test that the form filters recipes by name."""
         self.client.login(username='testuser', password='testpass')
-        response = self.client.post(reverse('recipe_search'), {'Recipe_Name': 'Pasta'})
+        response = self.client.post(reverse('recipes:recipe_search'), {'Recipe_Name': 'Pasta'})
         
         # Check if only the "Pasta" recipe is in the response context
         self.assertContains(response, 'Pasta')
@@ -104,16 +104,20 @@ class RecipeFormTests(TestCase):
     def test_form_chart_generation(self):
         """Test that the chart is generated when a valid chart type is selected."""
         self.client.login(username='testuser', password='testpass')
-        response = self.client.post(reverse('recipe_search'), {
+        
+        # Post a request with valid data for chart generation
+        response = self.client.post(reverse('recipes:recipe_search'), {
             'Recipe_Name': 'Pasta',
-            'chart_type': 'pie',  # Assuming 'pie' is a valid chart type
+            'chart_type': '#2',  # Use the correct key for pie chart (matching the form's CHART_CHOICES)
         })
-        self.assertIn('chart', response.context)  # Check if chart is in the context
-        self.assertIsNotNone(response.context['chart'])  # Ensure the chart is generated
+        
+        # Check if chart is in the context and is not None
+        self.assertIn('chart', response.context)  # Check if 'chart' key exists in the context
+        self.assertIsNotNone(response.context['chart'])  # Ensure a chart is actually generated
 
     def test_form_invalid_submission(self):
         """Test that an invalid form submission doesn't break the view."""
         self.client.login(username='testuser', password='testpass')
-        response = self.client.post(reverse('recipe_search'), {'chart_type': 'invalid_chart'})
+        response = self.client.post(reverse('recipes:recipe_search'), {'chart_type': 'invalid_chart'})
         self.assertEqual(response.status_code, 200)  # Page should still load
         self.assertIsNone(response.context.get('chart'))  # No chart should be generated with invalid data

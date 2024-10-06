@@ -36,6 +36,10 @@ class RecipeSearchView(LoginRequiredMixin, View):
         # Default queryset for recipes
         queryset = Recipe.objects.all()
 
+        # Initialize to None
+        chart_type = None
+        chart = None
+
         if form.is_valid():
             recipe_name = form.cleaned_data.get("Recipe_Name")
             ingredients = form.cleaned_data.get("Ingredients")
@@ -61,16 +65,22 @@ class RecipeSearchView(LoginRequiredMixin, View):
 
         recipe_df = pd.DataFrame(recipe_data)
 
-        # Generate chart if there are results
-        chart = None
+        # Generate chart if there are results and a valid chart type is provided
         if not recipe_df.empty and chart_type:
-            chart = get_chart(chart_type, recipe_df)
+            if chart_type == "#1":  # Bar Chart
+                chart = get_chart('bar', recipe_df)
+            elif chart_type == "#2":  # Pie Chart
+                chart = get_chart('pie', recipe_df)
+            elif chart_type == "#3":  # Line Chart
+                chart = get_chart('line', recipe_df)
+            else:
+                chart = None  # If the chart type is invalid, set chart to None
 
         # Add form, DataFrame, chart, and queryset (for recipe cards) to context
         context = {
             'form': form,
             'recipe_df': recipe_df.to_html() if not recipe_df.empty else None,
-            'chart': chart,
+            'chart': chart if chart else None,
             'recipes': queryset,  # Pass queryset for recipe cards
         }
         return render(request, self.template_name, context)
