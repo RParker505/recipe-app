@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>All Recipes</title>
+    <title>Add Recipe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
@@ -22,20 +22,31 @@
         <button><a href="{% url 'logout' %}">Logout</a></button>
     </nav>
 
-    <h1>All Recipes</h1>
-
+    <h1>Add a New Recipe</h1>
+ 
     <div class="content-wrapper">
-        <div class="recipe-list">
-            {% for recipe in object_list %}
-            <div class="recipe-card">
-                <img src="{{ recipe.pic.url }}" alt="{{ recipe.name }}" class="recipe-image">
-                <div class="recipe-info">
-                    <h2><a href = "{{recipe.get_absolute_url}}">{{ recipe.name }}</a></h2>
-                </div>
+        <form action="" method="POST" enctype="multipart/form-data" class="search-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.name.label_tag }}
+                {{ form.name }}
             </div>
-            {% endfor %}
-        </div>
+            <div class="form-group">
+                {{ form.cooking_time.label_tag }}
+                {{ form.cooking_time }}
+            </div>
+            <div class="form-group">
+                {{ form.ingredients.label_tag }}
+                {{ form.ingredients }}
+            </div>
+            <div class="form-group">
+                {{ form.pic.label_tag }}
+                {{ form.pic }}
+            </div>
+            <button type="submit" class="btn-submit">Add Recipe</button>
+        </form>
     </div>
+
 </body>
 
 </html>

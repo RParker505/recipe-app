@@ -1,8 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, View   # To display list of recipes and their details
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, View, TemplateView   # To display list of recipes and their details
 from .models import Recipe                  # To access Recipe model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import RecipeSearchForm    # Import form from forms.py
+from .forms import RecipeSearchForm, AddRecipeForm    # Import form from forms.py
 import pandas as pd
 from .utils import get_chart    # Import from utils.py
 
@@ -84,3 +84,18 @@ class RecipeSearchView(LoginRequiredMixin, View):
             'recipes': queryset,  # Pass queryset for recipe cards
         }
         return render(request, self.template_name, context)
+
+def add_recipe_view(request):
+    if request.method == 'POST':
+        form = AddRecipeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()  # Save the form data to create a new Recipe
+            return redirect('recipes:list')  # Redirect to the recipe list page (adjust as needed)
+    else:
+        form = AddRecipeForm()
+    
+    return render(request, 'recipes/add_recipe.html', {'form': form})
+
+# Class-based view for About Me
+class AboutMeView(TemplateView):
+    template_name = 'recipes/about_me.html'

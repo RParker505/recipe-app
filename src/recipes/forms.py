@@ -52,3 +52,43 @@ class RecipeSearchForm(forms.Form):
         if not recipe_name and not ingredients:
             raise forms.ValidationError("Please enter a recipe name or select ingredients.")
         return cleaned_data
+
+class AddRecipeForm(forms.ModelForm):
+    class Meta:
+        model = Recipe  # Specify the model to associate with the form
+        fields = ['name', 'cooking_time', 'ingredients', 'pic']  # Specify the fields to be included in the form
+
+        # Customize the form field widgets
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Recipe Name'
+            }),
+            'cooking_time': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Cooking Time (in minutes)'
+            }),
+            'ingredients': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter Ingredients separated by commas',
+                'rows': 4,
+            }),
+            'pic': forms.ClearableFileInput(attrs={
+                'class': 'form-control-file'
+            })
+        }
+
+        # Customize labels if needed
+        labels = {
+            'name': 'Recipe Name',
+            'cooking_time': 'Cooking Time',
+            'ingredients': 'Ingredients (comma-separated)',
+            'pic': 'Recipe Image',
+        }
+
+    # Add any custom validation logic here if needed
+    def clean_ingredients(self):
+        ingredients = self.cleaned_data.get('ingredients')
+        if len(ingredients.split(',')) > 10:
+            raise forms.ValidationError('Please limit to 10 ingredients.')
+        return ingredients

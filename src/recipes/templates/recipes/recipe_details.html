@@ -6,186 +6,7 @@
 <head>
     <title>Recipe Details</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
-        html, body {
-            margin: 0; /* Remove default margins */
-            padding: 0; /* Remove any padding */
-            width: 100%; /* Ensure the body takes up the full width */
-            height: 100%; /* Ensure the body takes up the full height */
-            /* overflow-x: hidden; Prevent horizontal scrolling */
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative; /* Ensure that child elements can be layered on top */
-            font-size: 1.5rem;
-            color: rgb(47, 79, 79);
-            min-height: 100vh; /* Ensure body takes up at least the full viewport height */
-        }
-
-        .fullscreen-bg {
-            position: fixed; /* Make the image fixed in the background */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensure the image covers the entire area */
-            z-index: -1; /* Place the image behind other content */
-        }
-
-        .content-wrapper {
-            width: 100%;
-            max-width: 1200px; /* Optionally limit the width of the content */
-            padding: 20px;
-            text-align: center; /* Center the content */
-        }
-
-        .recipe-list {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px; /* Space between each card */
-            margin-top: 20px;
-        }
-
-        .recipe-card {
-            display: flex;
-            align-items: center;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for the card */
-            padding: 20px;
-            width: 600px; /* Adjust width of each card */
-            max-width: 100%;
-        }
-
-        .recipe-image {
-            width: 150px;
-            height: 150px;
-            border-radius: 8px; /* Slight rounding on the image */
-            object-fit: cover;
-            margin-right: 20px;
-        }
-
-        h1,
-        h2,
-        h3 {
-            color: rgb(47, 79, 79);
-            font-family: 'Roboto Mono', 'Calibri', 'Trebuchet MS', sans-serif;
-          font-size: 3.5rem;
-        }
-      
-        h2 {
-            font-size: 2.6rem; /* For h2 size, adjust this value as needed */
-        }
-        h3 {
-            font-size: 1.8rem; /* For h3 size, adjust this value as needed */
-        }
-
-        /* Styles for the logout link */
-        a {
-            display: inline-block; /* Turn the link into a block element */
-            padding: 10px 20px; /* Add some padding */
-            margin-top: 20px; /* Space above the button */
-            text-decoration: none; /* Remove underline */
-            font-size: 1.2rem; /* Make the text a bit larger */
-            font-family: 'Roboto Mono', 'Calibri', 'Trebuchet MS', sans-serif; /* Match the font with other elements */
-            color: white; /* White text color */
-            background-color: rgb(47, 79, 79); /* Match the main color of the page */
-            border-radius: 25px; /* Rounded corners for a modern look */
-            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
-        }
-
-        /* Hover effect */
-        a:hover {
-            background-color: rgb(35, 64, 64); /* Darker shade on hover */
-            transform: translateY(-2px); /* Slight upward movement */
-        }
-
-        /* Active effect */
-        a:active {
-            background-color: rgb(47, 79, 79); /* Original color on click */
-            transform: translateY(1px); /* Slight downward movement on click */
-        }
-
-        .logout-btn {
-            position: absolute;
-            top: 20px; /* Adjusts the top position */
-            right: 20px; /* Adjusts the right position */
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 1.2rem;
-            color: white;
-            background-color: rgb(47, 79, 79);
-            border-radius: 25px;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: rgb(35, 64, 64);
-            transform: translateY(-2px);
-        }
-
-        .logout-btn:active {
-            background-color: rgb(47, 79, 79);
-            transform: translateY(1px);
-        }
-
-        .btn-clear {
-            font-size: 1.2rem;
-            padding: 10px 20px;
-            background-color: #483D8B;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            text-decoration: none;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-
-        .btn-clear:hover {
-            background-color: #332C63;
-        }
-
-        .btn-submit:hover {
-            background-color: #1e2e2e;
-        }
-
-        .btn-submit:active {
-            background-color: rgb(47, 79, 79);
-            transform: translateY(1px);
-        }
-
-        /* Styles for the search button */
-        .search-btn {
-            display: inline-block; /* Turn the link into a block element */
-            padding: 10px 20px; /* Add some padding */
-            margin-top: 20px; /* Space above the button */
-            text-decoration: none; /* Remove underline */
-            font-size: 1.2rem; /* Match the font size */
-            font-family: 'Roboto Mono', 'Calibri', 'Trebuchet MS', sans-serif; /* Font family */
-            color: white; /* White text color */
-            background-color: rgb(47, 79, 79); /* Match the background color */
-            border-radius: 25px; /* Rounded corners for a modern look */
-            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
-            text-align: center; /* Center the text */
-            margin-bottom: 20px; /* Add some space at the bottom */
-        }
-
-        /* Hover effect for the search button */
-        .search-btn:hover {
-            background-color: rgb(35, 64, 64); /* Darker shade on hover */
-            transform: translateY(-2px); /* Slight upward movement */
-        }
-
-        /* Active effect for the search button */
-        .search-btn:active {
-            background-color: rgb(47, 79, 79); /* Original color on click */
-            transform: translateY(1px); /* Slight downward movement on click */
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
@@ -193,16 +14,17 @@
     alt="Background image" 
     class="fullscreen-bg">
 
-    <!-- Tells Django to load the URL with the name “logout” when the user clicks -->
-    <a href="{%url 'logout' %}" class="logout-btn"> Logout </a>
+    <nav>
+        <button><a href="{% url 'recipes:list' %}">View All Recipes</a></button>
+        <button><a href="{% url 'recipes:add_recipe' %}">Add Recipe</a></button>
+        <button><a href="{% url 'recipes:recipe_search' %}">Search Recipes</a></button>
+        <button><a href="{% url 'recipes:about_me' %}">About Me</a></button>
+        <button><a href="{% url 'logout' %}">Logout</a></button>
+    </nav>
 
     <h2>Recipe Details</h2>
 
     <div class="content-wrapper">
-        <a href="{%url 'recipes:recipe_search' %}" class="search-btn"> Search Recipes </a>
-        <br>
-        <a href="{% url 'recipes:list' %}" class="btn-clear">View All Recipes</a>
-        <br>
         <div class="recipe-list">
             <div class="recipe-card">
                 <img src="{{ recipe.pic.url }}" alt="{{ recipe.name }}" class="recipe-image">

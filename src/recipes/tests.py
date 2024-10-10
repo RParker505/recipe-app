@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Recipe    #to access Recipe model
+from .forms import AddRecipeForm
 
 # Create your tests here.
 class RecipeModelTest(TestCase):
@@ -121,3 +122,70 @@ class RecipeFormTests(TestCase):
         response = self.client.post(reverse('recipes:recipe_search'), {'chart_type': 'invalid_chart'})
         self.assertEqual(response.status_code, 200)  # Page should still load
         self.assertIsNone(response.context.get('chart'))  # No chart should be generated with invalid data
+
+class AddRecipeFormTests(TestCase):
+
+    def test_valid_form(self):
+        """Test if the form is valid when given valid data"""
+        form_data = {
+            'name': 'Chocolate Cake',
+            'cooking_time': 45.0,
+            'ingredients': 'flour, sugar, cocoa powder, eggs',
+            'pic': None  # Assuming the image is optional
+        }
+        form = AddRecipeForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form_missing_name(self):
+        """Test if the form is invalid when 'name' is missing"""
+        form_data = {
+            'cooking_time': 45.0,
+            'ingredients': 'flour, sugar, cocoa powder, eggs',
+            'pic': None
+        }
+        form = AddRecipeForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('name', form.errors)
+
+    def test_invalid_form_empty_ingredients(self):
+        """Test if the form is invalid when 'ingredients' is an empty string"""
+        form_data = {
+            'name': 'Chocolate Cake',
+            'cooking_time': 45.0,
+            'ingredients': '',  # Invalid empty ingredients
+            'pic': None
+        }
+        form = AddRecipeForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('ingredients', form.errors)
+
+    def test_form_invalid_cooking_time(self):
+        """Test if form is invalid with non-float cooking time"""
+        form_data = {
+            'name': 'Pasta',
+            'cooking_time': 'invalid_time',  # Invalid time
+            'ingredients': 'pasta, sauce',
+            'pic': None
+        }
+        form = AddRecipeForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertIn('cooking_time', form.errors)
+
+class AboutMeViewTests(TestCase):
+
+    def test_about_me_view_status_code(self):
+        """Test if About Me view returns a 200 status code"""
+        response = self.client.get(reverse('recipes:about_me'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_about_me_template_used(self):
+        """Test if the correct template is used for About Me view"""
+        response = self.client.get(reverse('recipes:about_me'))
+        self.assertTemplateUsed(response, 'recipes/about_me.html')
+
+    def test_about_me_content(self):
+        """Test if the About Me page contains expected content"""
+        response = self.client.get(reverse('recipes:about_me'))
+        self.assertContains(response, "Rocky")  # Check that my name header is there
+        self.assertContains(response, "Bon appetit!")   # A portion of the bio
+        self.assertContains(response, "Technology Used")     # Check if 'Skills' section is there
