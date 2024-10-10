@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, View, TemplateView   # To display list of recipes and their details
 from .models import Recipe                  # To access Recipe model
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from .forms import RecipeSearchForm, AddRecipeForm    # Import form from forms.py
 import pandas as pd
 from .utils import get_chart    # Import from utils.py
@@ -85,6 +86,7 @@ class RecipeSearchView(LoginRequiredMixin, View):
         }
         return render(request, self.template_name, context)
 
+@login_required
 def add_recipe_view(request):
     if request.method == 'POST':
         form = AddRecipeForm(request.POST, request.FILES)
@@ -97,5 +99,5 @@ def add_recipe_view(request):
     return render(request, 'recipes/add_recipe.html', {'form': form})
 
 # Class-based view for About Me
-class AboutMeView(TemplateView):
+class AboutMeView(LoginRequiredMixin, TemplateView):
     template_name = 'recipes/about_me.html'
