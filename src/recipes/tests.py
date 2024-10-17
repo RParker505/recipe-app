@@ -173,18 +173,25 @@ class AddRecipeFormTests(TestCase):
 
 class AboutMeViewTests(TestCase):
 
+    def setUp(self):
+        # Create a user for login tests
+        self.user = User.objects.create_user(username='testuser', password='testpass')
+
     def test_about_me_view_status_code(self):
         """Test if About Me view returns a 200 status code"""
+        self.client.login(username='testuser', password='testpass')  # Log in the user
         response = self.client.get(reverse('recipes:about_me'))
         self.assertEqual(response.status_code, 200)
 
     def test_about_me_template_used(self):
         """Test if the correct template is used for About Me view"""
+        self.client.login(username='testuser', password='testpass')  # Log in the user
         response = self.client.get(reverse('recipes:about_me'))
         self.assertTemplateUsed(response, 'recipes/about_me.html')
 
     def test_about_me_content(self):
         """Test if the About Me page contains expected content"""
+        self.client.login(username='testuser', password='testpass')  # Log in the user
         response = self.client.get(reverse('recipes:about_me'))
         self.assertContains(response, "Rocky")  # Check that my name header is there
         self.assertContains(response, "Bon appetit!")   # A portion of the bio
